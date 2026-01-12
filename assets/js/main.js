@@ -1,6 +1,6 @@
 const init = async function () {
     const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
-    fetchGET(URL);
+    // fetchGET(URL);
 };
 
 const fetchGET = async function (url) {
