@@ -18,7 +18,7 @@ export class Mosdo {
         if (typeof papir != 'boolean') {
             throw new Error(`Papir mezo helytelen: ${papir}, boolean erteket kell kapjon.`)
         };
-        if (typeof mukodik != 'boolean') {
+        if (typeof csap != 'boolean') {
             throw new Error(`Csap mezo helytelen: ${csap}, boolean erteket kell kapjon.`)
         };
         if (typeof tisztasag != 'number' || tisztasag < 1 || tisztasag === null || tisztasag > 5) {
@@ -33,7 +33,35 @@ export class Mosdo {
         this.csap = csap;
         this.tisztasag = tisztasag;
     };
-    toString () {
+    toString() {
         return (`ID: ${this.id}. Tipus: ${this.tipus}. Helyszin: ${this.helyszin}. Mukodik: ${this.mukodik}. Foglalt: ${this.foglalt}. Papir: ${this.papir}. Csap: ${this.csap}. Tisztasag: ${this.tisztasag}`);
+    };
+    async postMosdoToDB(url) {
+        const obj = {
+            id: this.id,
+            tipus: this.tipus,
+            helyszin: this.helyszin,
+            mukodik: this.mukodik,
+            foglalt: this.foglalt,
+            papir: this.papir,
+            csap: this.csap,
+            tisztasag: this.tisztasag,
+        };
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            });
+            const data = await response.text();
+            if (!response.ok) {
+                throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${data}`)
+            };
+            console.log('A fetch sikeres volt' + data);
+        } catch (err) {
+            throw new Error(err);
+        };
     };
 };

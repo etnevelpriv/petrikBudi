@@ -3,7 +3,8 @@ import { Mosdo } from "./mosdo.js";
 const init = async function () {
     const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
     // fetchGET(URL);
-    // fetchPUT(URL);
+    // fetchDELETE(URL);
+    document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs(URL));
 };
 
 const fetchGET = async function (url) {
@@ -40,42 +41,19 @@ const fetchDELETE = async function (url, arr) {
     };
 };
 
-const getFormInputs = function () {
-    const id = document.getElementById('idInput');
-    const tipus = document.getElementById('tipusInput');
-    const helyszin = document.getElementById('helyszinInput');
-    const mukodik = document.getElementById('mukodikInput');
-    const foglalt = document.getElementById('foglaltInput');
-    const papir = document.getElementById('papirInput');
-    const csap = document.getElementById('csapInput');
-    const tisztasag = document.getElementById('tisztasagInput');
+const getFormInputs = async function (url) {
+    const id = document.getElementById('idInput').value;
+    const tipus = document.getElementById('tipusInput').value;
+    const helyszin = document.getElementById('helyszinInput').value;
+    const mukodik = document.getElementById('mukodikInput').checked;
+    const foglalt = document.getElementById('foglaltInput').checked;
+    const papir = document.getElementById('papirInput').checked;
+    const csap = document.getElementById('csapInput').checked;
+    const tisztasag = document.getElementById('tisztasagInput').value;
 
-    const idValue = id.value;
-    const tipusValue = tipus.value;
-    const helyszinValue = helyszin.value;
-    const mukodikValue = mukodik.checked;
-    const foglaltValue = foglalt.checked;
-    const papirValue = papir.checked;
-    const csapValue = csap.checked;
-    const tisztasagValue = tisztasag.value;
-
-    const idName = id.name;
-    const tipusName = tipus.name;
-    const helyszinName = helyszin.name;
-    const mukodikName = helyszin.name;
-    const foglaltName = helyszin.name;
-    const papirPapir = helyszin.name;
-    const csapPapir = helyszin.name;
-    const tisztasagPapir = tisztasag.name;
-
-    const mosdo = new Mosdo(Number(id.value), tipus.value, helyszin.value, mukodik.checked, foglalt.checked, papir.checked, csap.checked, Number(tisztasag.value));
+    const mosdo = new Mosdo(Number(id), tipus, helyszin, mukodik, foglalt, papir, csap, Number(tisztasag));
     console.log(mosdo.toString())
-    console.log(`gatya`)
-};
-
-const fetchPUT = async function () {
-
+    await mosdo.postMosdoToDB(url);
 };
 
 document.addEventListener('DOMContentLoaded', init);
-document.getElementById('uploadFormButton').addEventListener('click', getFormInputs);
