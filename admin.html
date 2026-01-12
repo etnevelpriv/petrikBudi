@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/admin.css">
+    <title>Admin</title>
+</head>
+
+<body>
+    <h1>ADMIN OLDAL</h1>
+    <div class="container feltoltes-container">
+        <h2>Feltoltes</h2>
+        <form>
+            <div class="form-element">
+                <label for="idInput">ID</label>
+                <input id="idInput" name="id" type="number">
+            </div>
+
+            <div class="form-element">
+                <label for="tipusInput">Tipus (pl: ferfi, noi, mozgasserult)</label>
+                <input id="tipusInput" name="tipus" type="text">
+            </div>
+
+            <div class="form-element">
+                <label for="helyszinInput">Helyszin (pl:A 2.emelet)</label>
+                <input id="helyszinInput" name="helyszin" type="text">
+            </div>
+
+            <div class="form-element">
+                <label for="mukodikInput">Mukodik?</label>
+                <input id="mukodikInput" name="mukodik" type="checkbox">
+            </div>
+
+            <div class="form-element">
+                <label for="foglaltInput">Foglalt?</label>
+                <input id="foglaltInput" name="foglalt" type="checkbox">
+            </div>
+
+            <div class="form-element">
+                <label for="papirInput">Van wc papir?</label>
+                <input id="papirInput" name="papir" type="checkbox">
+            </div>
+
+            <div class="form-element">
+                <label for="csapInput">Van csap?</label>
+                <input id="csapInput" name="csap" type="checkbox">
+            </div>
+
+            <div class="form-element">
+                <label for="tisztasagInput">Tisztasag(1-5)?</label>
+                <input id="tisztasagInput" name="tisztasag" type="range" value="1" min="1" max="5">
+            </div>
+        </form>
+        <button id="uploadFormButton">Feltoltes</button>
+    </div>
+    <hr class="line">
+
+    <div class="container feltoltes-container">
+        <h2>Torles</h2>
+        <input type="number" name="id-torles" id="torlesIDInput">
+        <button id="deleteButton">Torles</button>
+    </div>
+    <hr class="line">
+
+    <script type="module" src="./assets/js/admin.js"></script>
+</body>
+
+</html>

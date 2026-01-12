@@ -5,6 +5,7 @@ const init = async function () {
     // fetchGET(URL);
     // fetchDELETE(URL);
     document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs(URL));
+    document.getElementById('deleteButton').addEventListener('click', () => deleteMosdoByID(URL));
 };
 
 const fetchGET = async function (url) {
@@ -54,6 +55,28 @@ const getFormInputs = async function (url) {
     const mosdo = new Mosdo(Number(id), tipus, helyszin, mukodik, foglalt, papir, csap, Number(tisztasag));
     console.log(mosdo.toString())
     await mosdo.postMosdoToDB(url);
+};
+
+const deleteMosdoByID = async function (url) {
+    const id = document.getElementById('torlesIDInput').value;
+    try {
+        const response = await fetch(`${url}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!response.ok) {
+            if (response.status == '404') {
+                throw new Error(`Nincs ilyen ID valoszinuleg, probalkozz egy masikkal.`);
+
+            };
+            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+        };
+        console.log(await response.text())
+    } catch (err) {
+        throw new Error(err);
+    };
 };
 
 document.addEventListener('DOMContentLoaded', init);

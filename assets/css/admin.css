@@ -1,0 +1,58 @@
+:root {
+    --dark: #171616;
+    --light: #d6c9c9;
+    --blue: #24c0e3;
+    --dark-pink: #2b7181;
+}
+
+body {
+    font-family: monospace;
+    font-size: 20px;
+    background-color: var(--dark);
+    color: var(--light);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+    color: var(--blue);
+}
+
+h2 {
+    font-size: 35px;
+    text-align: center;
+    color: var(--blue);
+}
+
+.line {
+    width: 80%;
+    height: 5px;
+    color: var(--blue);
+    background-color: var(--blue);
+    border: var(--blue);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-element {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+label {
+    margin: 10px auto;
+}
+
+input {
+    margin: 0 auto;
+    width: 200px;
+}
