@@ -2,10 +2,8 @@ import { Mosdo } from "./mosdo.js";
 
 const init = async function () {
     const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
-    // fetchGET(URL);
-    // fetchDELETE(URL);
+    printMosdok(await fetchGET(URL), URL);
     document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs(URL));
-    document.getElementById('deleteButton').addEventListener('click', () => deleteMosdoByID(URL));
 };
 
 const fetchGET = async function (url) {
@@ -16,8 +14,7 @@ const fetchGET = async function (url) {
         if (!response.ok) {
             throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
         };
-        const databaseArray = await response.json()
-        // fetchDELETE(url, databaseArray)
+        return (await response.json());
     } catch (err) {
         throw new Error(err);
     };
@@ -57,8 +54,7 @@ const getFormInputs = async function (url) {
     await mosdo.postMosdoToDB(url);
 };
 
-const deleteMosdoByID = async function (url) {
-    const id = document.getElementById('torlesIDInput').value;
+const deleteMosdoByID = async function (id, url) {
     try {
         const response = await fetch(`${url}/${id}`, {
             method: 'DELETE',
@@ -77,6 +73,29 @@ const deleteMosdoByID = async function (url) {
     } catch (err) {
         throw new Error(err);
     };
+};
+
+const printMosdok = function (arr, url) {
+    const container = document.getElementById('torlesContainer');
+    // console.log(arr)
+    arr.forEach(element => {
+        const card = document.createElement('div');
+        card.classList.add('torles-kartya');
+        container.appendChild(card);
+
+        const id = document.createElement('h3');
+        id.textContent = element.id;
+        card.appendChild(id);
+
+        const name = document.createElement('strong');
+        name.textContent = element.helyszin;
+        card.appendChild(name);
+
+        const button = document.createElement('button');
+        button.textContent = 'Torles';
+        card.appendChild(button);
+        button.addEventListener('click', () => deleteMosdoByID(element.id, url))
+    });
 };
 
 document.addEventListener('DOMContentLoaded', init);
