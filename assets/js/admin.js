@@ -1,8 +1,9 @@
 import { Mosdo } from "./mosdo.js";
 
 const init = async function () {
+    document.getElementById('alert').classList.add('hide');
     const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
-    printMosdok(await fetchGET(URL), URL);
+    showMosdok(await fetchGET(URL), URL);
     document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs(URL));
 };
 
@@ -15,25 +16,6 @@ const fetchGET = async function (url) {
             throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
         };
         return (await response.json());
-    } catch (err) {
-        throw new Error(err);
-    };
-};
-
-const fetchDELETE = async function (url, arr) {
-
-    const id = 50;
-    try {
-        const response = await fetch(`${url}/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
-        };
-        console.log(await response.text())
     } catch (err) {
         throw new Error(err);
     };
@@ -55,28 +37,30 @@ const getFormInputs = async function (url) {
 };
 
 const deleteMosdoByID = async function (id, url) {
-    try {
-        const response = await fetch(`${url}/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        if (!response.ok) {
-            if (response.status == '404') {
-                throw new Error(`Nincs ilyen ID valoszinuleg, probalkozz egy masikkal.`);
+    if (alertModalMegjelenites('Ezzel vegleg torlodni fog a mosdo.')) {
+        try {
+            const response = await fetch(`${url}/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (!response.ok) {
+                if (response.status == '404') {
+                    throw new Error(`Nincs ilyen ID valoszinuleg, probalkozz egy masikkal.`);
 
+                };
+                throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
             };
-            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+            console.log(await response.text())
+        } catch (err) {
+            throw new Error(err);
         };
-        console.log(await response.text())
-    } catch (err) {
-        throw new Error(err);
     };
 };
 
-const printMosdok = function (arr, url) {
-    const container = document.getElementById('torlesContainer');
+const showMosdok = function (arr, url) {
+    const container = document.getElementById('modositasContainer');
     // console.log(arr)
     arr.forEach(element => {
         const card = document.createElement('div');
@@ -92,9 +76,73 @@ const printMosdok = function (arr, url) {
         card.appendChild(name);
 
         const button = document.createElement('button');
-        button.textContent = 'Torles';
+        button.textContent = 'Modositas';
         card.appendChild(button);
-        button.addEventListener('click', () => deleteMosdoByID(element.id, url))
+        button.addEventListener('click', () => modalMegjelenitese(element, url))
+    });
+};
+
+const modalMegjelenitese = function (mosdo, url) {
+    const modal = document.getElementById('modal');
+    for (const [key, value] of Object.entries(mosdo)) {
+
+        const container = document.createElement('div');
+        container.classList.add('modal-row');
+        modal.appendChild(container);
+
+        console.log(`${key}: ${value}`);
+
+        const kulcs = document.createElement('p');
+        kulcs.classList.add('modal-kulcs');
+        kulcs.textContent = key;
+
+        const ertek = document.createElement('p');
+        ertek.classList.add('modal-ertek');
+        ertek.textContent = value;
+
+        const gomb = document.createElement('i');
+        gomb.classList.add('modal-modositas-gomb', 'fa-solid', 'fa-pen-to-square');
+        gomb.addEventListener('click', () => pToInput(key, value, ertek));
+
+        container.appendChild(kulcs);
+        container.appendChild(ertek);
+        container.appendChild(gomb);
+
+    };
+
+    const container = document.createElement('div');
+    container.classList.add('modal-buttons');
+    modal.appendChild(container);
+
+    const gombTorles = document.createElement('button');
+    gombTorles.classList.add('modal-modositas-gomb');
+    gombTorles.textContent = 'Torles';
+    gombTorles.addEventListener('click', () => deleteMosdoByID(mosdo.id, url));
+    container.appendChild(gombTorles);
+
+    const gombMentes = document.createElement('button');
+    gombMentes.classList.add('modal-modositas-gomb');
+    gombMentes.textContent = 'Mentes';
+    gombMentes.addEventListener('click', () => deleteMosdoByID(mosdo.id, url));
+    container.appendChild(gombMentes);
+};
+
+const alertModalMegjelenites = function (szoveg) {
+    const alertModal = document.getElementById('alert');
+    const visszaGomb = document.getElementById('alertVissza');
+    const tovabbGomb = document.getElementById('alertTovabb');
+    const p = document.getElementById('alertSzoveg');
+    p.textContent = szoveg;
+    alertModal.classList.add('show');
+    visszaGomb.addEventListener('click', () => {
+        alertModal.classList.remove('show');
+        alertModal.classList.add('hide');
+        return false;
+    });
+    tovabbGomb.addEventListener('click', () => {
+        alertModal.classList.remove('show');
+        alertModal.classList.add('hide');
+        return true;
     });
 };
 
