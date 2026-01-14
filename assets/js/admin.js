@@ -24,14 +24,15 @@ const fetchGET = async function (url) {
 const getFormInputs = async function (url) {
     const id = document.getElementById('idInput').value;
     const tipus = document.getElementById('tipusInput').value;
-    const helyszin = document.getElementById('helyszinInput').value;
+    const epulet = document.querySelector('input[name="epulet"]:checked').value;
+    const emelet = document.getElementById('emeletInput').value;
     const mukodik = document.getElementById('mukodikInput').checked;
     const foglalt = document.getElementById('foglaltInput').checked;
     const papir = document.getElementById('papirInput').checked;
     const csap = document.getElementById('csapInput').checked;
     const tisztasag = document.getElementById('tisztasagInput').value;
 
-    const mosdo = new Mosdo(Number(id), tipus, helyszin, mukodik, foglalt, papir, csap, Number(tisztasag));
+    const mosdo = new Mosdo(Number(id), tipus, epulet, Number(emelet), mukodik, foglalt, papir, csap, Number(tisztasag));
     console.log(mosdo.toString())
     await mosdo.postMosdoToDB(url);
 };
@@ -75,7 +76,7 @@ const showMosdok = function (arr, url) {
         card.appendChild(id);
 
         const name = document.createElement('strong');
-        name.textContent = element.helyszin;
+        name.textContent = `${element.epulet} épület ${element.emelet}. emelet`;
         card.appendChild(name);
 
         const button = document.createElement('button');

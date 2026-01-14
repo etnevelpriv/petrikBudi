@@ -1,13 +1,16 @@
 export class Mosdo {
-    constructor(id, tipus, helyszin, mukodik, foglalt, papir, csap, tisztasag) {
+    constructor(id, tipus, epulet, emelet, mukodik, foglalt, papir, csap, tisztasag) {
         if (typeof id != 'number' || id === 0 || id === null) {
             throw new Error(`ID mezo helytelen: ${id}, szamot kell megadni.`)
         };
         if (typeof tipus != 'string' || (tipus != 'Ferfi' && tipus != 'Noi' && tipus != 'Mozgasserult')) {
             throw new Error(`Tipus mezo helytelen: ${tipus}, csak a megadott tipusok kozul lehet valasztani.`)
         };
-        if (typeof helyszin != 'string' || helyszin === '' || helyszin === null) {
-            throw new Error(`Helyszin mezo helytelen: ${helyszin}, ures a mezo.`)
+        if (typeof epulet != 'string' || (epulet != 'A' && epulet != 'B')) {
+            throw new Error(`Epulet mezo helytelen: ${epulet}, csak A vagy B lehet.`)
+        };
+        if (typeof emelet != 'number' || emelet < -1 || emelet > 3 || emelet === null) {
+            throw new Error(`Emelet mezo helytelen: ${emelet}, szamot kell megadni -1 es 3 kozott.`)
         };
         if (typeof mukodik != 'boolean') {
             throw new Error(`Mukodik mezo helytelen: ${mukodik}, boolean erteket kell kapjon.`)
@@ -26,7 +29,8 @@ export class Mosdo {
         };
         this.id = id;
         this.tipus = tipus;
-        this.helyszin = helyszin;
+        this.epulet = epulet;
+        this.emelet = emelet;
         this.mukodik = mukodik;
         this.foglalt = foglalt;
         this.papir = papir;
@@ -34,13 +38,14 @@ export class Mosdo {
         this.tisztasag = tisztasag;
     };
     toString() {
-        return (`ID: ${this.id}. Tipus: ${this.tipus}. Helyszin: ${this.helyszin}. Mukodik: ${this.mukodik}. Foglalt: ${this.foglalt}. Papir: ${this.papir}. Csap: ${this.csap}. Tisztasag: ${this.tisztasag}`);
+        return (`ID: ${this.id}. Tipus: ${this.tipus}. Helyszin: ${this.epulet} épület ${this.emelet}. emelet. Mukodik: ${this.mukodik}. Foglalt: ${this.foglalt}. Papir: ${this.papir}. Csap: ${this.csap}. Tisztasag: ${this.tisztasag}`);
     };
     async postMosdoToDB(url) {
         const obj = {
             id: this.id,
             tipus: this.tipus,
-            helyszin: this.helyszin,
+            epulet: this.epulet,
+            emelet: this.emelet,
             mukodik: this.mukodik,
             foglalt: this.foglalt,
             papir: this.papir,
