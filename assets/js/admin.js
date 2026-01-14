@@ -37,7 +37,8 @@ const getFormInputs = async function (url) {
 };
 
 const deleteMosdoByID = async function (id, url) {
-    if (alertModalMegjelenites('Ezzel vegleg torlodni fog a mosdo.')) {
+    console.log('Elindult a torles folyamata')
+    if (await alertModalMegjelenites('Ezzel vegleg torlodni fog a mosdo.')) {
         try {
             const response = await fetch(`${url}/${id}`, {
                 method: 'DELETE',
@@ -48,9 +49,11 @@ const deleteMosdoByID = async function (id, url) {
             if (!response.ok) {
                 if (response.status == '404') {
                     throw new Error(`Nincs ilyen ID valoszinuleg, probalkozz egy masikkal.`);
-
-                };
+                } else if (response.status == '400') {
+                    throw new Error(`Ez az utolso adat az adatbazisban, legyszi ne torold ki.`);
+                } else {
                 throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+                };
             };
             console.log(await response.text())
         } catch (err) {
@@ -123,26 +126,30 @@ const modalMegjelenitese = function (mosdo, url) {
     const gombMentes = document.createElement('button');
     gombMentes.classList.add('modal-modositas-gomb');
     gombMentes.textContent = 'Mentes';
-    gombMentes.addEventListener('click', () => deleteMosdoByID(mosdo.id, url));
+    gombMentes.addEventListener('click', () => putMosdoByID(mosdo.id, url));
     container.appendChild(gombMentes);
 };
 
 const alertModalMegjelenites = function (szoveg) {
-    const alertModal = document.getElementById('alert');
-    const visszaGomb = document.getElementById('alertVissza');
-    const tovabbGomb = document.getElementById('alertTovabb');
-    const p = document.getElementById('alertSzoveg');
-    p.textContent = szoveg;
-    alertModal.classList.add('show');
-    visszaGomb.addEventListener('click', () => {
-        alertModal.classList.remove('show');
-        alertModal.classList.add('hide');
-        return false;
-    });
-    tovabbGomb.addEventListener('click', () => {
-        alertModal.classList.remove('show');
-        alertModal.classList.add('hide');
-        return true;
+    console.log('Alert modal megjelent')
+    return new Promise((resolve, reject) => {
+        const alertModal = document.getElementById('alert');
+        const visszaGomb = document.getElementById('alertVissza');
+        const tovabbGomb = document.getElementById('alertTovabb');
+        const p = document.getElementById('alertSzoveg');
+        p.textContent = szoveg;
+        alertModal.classList.add('show');
+        alertModal.classList.remove('hide');
+        visszaGomb.addEventListener('click', () => {
+            alertModal.classList.remove('show');
+            alertModal.classList.add('hide');
+            resolve(false);
+        });
+        tovabbGomb.addEventListener('click', () => {
+            alertModal.classList.remove('show');
+            alertModal.classList.add('hide');
+            resolve(true);
+        });
     });
 };
 
