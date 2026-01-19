@@ -15,6 +15,22 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
+    overflow-x: hidden !important;
+}
+
+button {
+    border: 2px solid var(--blue);
+    background-color: transparent;
+    color: var(--light);
+    font-size: 20px;
+    padding: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease
+}
+button:hover {
+    border: 2px solid var(--blue);
+    background-color: var(--blue);
+    color: var(--dark);
 }
 
 .show {
@@ -63,4 +79,183 @@ label {
 input {
     margin: 0 auto;
     width: 200px;
+}
+
+select {
+    width: 200px;
+    margin: 0 auto;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    align-items: center;
+    width: 100px;
+}
+
+.radio {
+    height: 20px;
+    width: 20px;
+}
+
+.modal {
+    z-index: 1001;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark);
+}
+
+.modal-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-modal {
+    z-index: 1002;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark);
+}
+
+.xButton {
+    display: flex;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px;
+    color: var(--blue);
+    font-size: 50px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.xButton:hover {
+    transform: scale(1.2);
+    background-color: transparent;
+    color: var(--blue);
+    border: none;
+}
+
+input[type='number'] {
+    background-color: var(--dark);
+    outline: none;
+    border: none;
+    width: 200px;
+    padding: 10px;
+    font-size: 20px;
+    border: 2px solid var(--blue);
+    color: var(--light);
+    transition: all 0.3s ease;
+}
+
+input[type='number']:hover {
+    box-shadow: 0px 0px 40px 3px var(--blue);
+}
+
+input[type='number']:focus {
+    box-shadow: inset 0px 0px 10px 1px var(--blue);
+}
+
+select {
+    background-color: var(--dark);
+    outline: none;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    border: 2px solid var(--blue);
+    color: var(--light);
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+select:hover,
+input[type='radio']:hover,
+input[type='checkbox']:hover {
+    box-shadow: 0px 0px 40px 3px var(--blue);
+}
+
+select:focus {
+    box-shadow: inset 0px 0px 10px 1px var(--blue);
+}
+
+option:checked {
+    color: var(--blue);
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    background: var(--dark);
+    border: 2px solid var(--blue);
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+input[type='radio']:checked,
+input[type='checkbox']:checked {
+    background: var(--blue);
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 200px;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  outline: none;
+  margin: 20px auto;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--blue);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--blue);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  margin-top: -12px;
+}
+
+.torles-kartya {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+#modositasContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
 }

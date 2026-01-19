@@ -6,14 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/admin.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>Admin</title>
 </head>
 
 <body>
 
-    <div class="modal" id="modal"></div>
+    <div class="modal hide" id="modal">
+    </div>
     <div class="alert-modal" id="alert">
         <h2>FIGYELEM!</h2>
         <p class="alert-szoveg" id="alertSzoveg"></p>
@@ -33,7 +36,7 @@
             <div class="form-element">
                 <label for="tipusInput">Tipus (pl: ferfi, noi, mozgasserult)</label>
                 <select id="tipusInput" name="tipus">
-                    <option value="">-- Típus --</option>
+                    <option value="">Típus</option>
                     <option value="Ferfi">Férfi</option>
                     <option value="Noi">Női</option>
                     <option value="Mozgasserult">Mozgássérült</option>
@@ -43,10 +46,12 @@
             <div class="form-element">
                 <label>Epulet</label>
                 <div class="radio-group">
-                    <input id="epuletA" name="epulet" type="radio" value="A">
                     <label for="epuletA">A</label>
-                    <input id="epuletB" name="epulet" type="radio" value="B">
+                    <input class="radio" id="epuletA" name="epulet" type="radio" value="A">
+                </div>
+                <div class="radio-group">
                     <label for="epuletB">B</label>
+                    <input class="radio" id="epuletB" name="epulet" type="radio" value="B">
                 </div>
             </div>
 

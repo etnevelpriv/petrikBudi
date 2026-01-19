@@ -53,9 +53,12 @@ const deleteMosdoByID = async function (id, url) {
                 } else if (response.status == '400') {
                     throw new Error(`Ez az utolso adat az adatbazisban, legyszi ne torold ki.`);
                 } else {
-                throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+                    throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
                 };
             };
+            document.body.style.overflow = 'scroll';
+            document.getElementById('modal').classList.add('hide');
+            document.getElementById('modal').classList.remove('show');
             console.log(await response.text())
         } catch (err) {
             throw new Error(err);
@@ -88,6 +91,24 @@ const showMosdok = function (arr, url) {
 
 const modalMegjelenitese = function (mosdo, url) {
     const modal = document.getElementById('modal');
+    document.body.style.overflow = 'hidden';
+
+    while (modal.firstChild) {
+        modal.removeChild(modal.firstChild);
+    }
+
+    const xButton = document.createElement('button');
+    xButton.classList.add('xButton');
+    xButton.textContent = 'X';
+    xButton.addEventListener('click', () => {
+        document.body.style.overflow = 'scroll';
+        document.getElementById('modal').classList.add('hide');
+        document.getElementById('modal').classList.remove('show');
+    });
+    modal.appendChild(xButton)
+
+    modal.classList.remove('hide');
+    modal.classList.add('show');
     for (const [key, value] of Object.entries(mosdo)) {
 
         const container = document.createElement('div');
