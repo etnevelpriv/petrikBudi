@@ -139,6 +139,7 @@ const populateFormWithData = function (mosdo) {
     document.getElementById('tisztasagInput').value = mosdo.tisztasag;
     
     document.getElementById('uploadFormButton').textContent = 'Mentes';
+    document.getElementById('szoveg').textContent = 'Modositas';
     
     if (!document.getElementById('deleteFormButton')) {
         const deleteButton = document.createElement('button');
@@ -177,6 +178,8 @@ const resetForm = function () {
     document.getElementById('papirInput').checked = false;
     document.getElementById('csapInput').checked = false;
     document.getElementById('tisztasagInput').value = '1';
+    
+    document.getElementById('szoveg').textContent = 'Feltoltes';
     
     const deleteButton = document.getElementById('deleteFormButton');
     if (deleteButton) {
