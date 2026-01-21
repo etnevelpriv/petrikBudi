@@ -96,9 +96,6 @@ const deleteMosdoByID = async function (id) {
                     throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
                 };
             };
-            document.body.style.overflow = 'scroll';
-            document.getElementById('modal').classList.add('hide');
-            document.getElementById('modal').classList.remove('show');
             console.log(await response.text())
         } catch (err) {
             throw new Error(err);
@@ -143,6 +140,31 @@ const populateFormWithData = function (mosdo) {
     
     document.getElementById('uploadFormButton').textContent = 'Mentes';
     
+    if (!document.getElementById('deleteFormButton')) {
+        const deleteButton = document.createElement('button');
+        deleteButton.id = 'deleteFormButton';
+        deleteButton.textContent = 'Torles';
+        deleteButton.addEventListener('click', async () => {
+            await deleteMosdoByID(currentEditId);
+            currentEditId = null;
+            resetForm();
+            document.getElementById('uploadFormButton').textContent = 'Feltoltes';
+        });
+        document.getElementById('uploadFormButton').parentNode.appendChild(deleteButton);
+    }
+    
+    if (!document.getElementById('backFormButton')) {
+        const backButton = document.createElement('button');
+        backButton.id = 'backFormButton';
+        backButton.textContent = 'Vissza';
+        backButton.addEventListener('click', () => {
+            currentEditId = null;
+            resetForm();
+            document.getElementById('uploadFormButton').textContent = 'Feltoltes';
+        });
+        document.getElementById('uploadFormButton').parentNode.appendChild(backButton);
+    }
+    
     window.scrollTo(0, 0);
 };
 
@@ -155,6 +177,16 @@ const resetForm = function () {
     document.getElementById('papirInput').checked = false;
     document.getElementById('csapInput').checked = false;
     document.getElementById('tisztasagInput').value = '1';
+    
+    const deleteButton = document.getElementById('deleteFormButton');
+    if (deleteButton) {
+        deleteButton.remove();
+    }
+    
+    const backButton = document.getElementById('backFormButton');
+    if (backButton) {
+        backButton.remove();
+    }
 };
 
 const alertModalMegjelenites = function (szoveg) {
