@@ -1,0 +1,89 @@
+:root {
+    --dark: #171616;
+    --light: #d6c9c9;
+    --blue: #24c0e3;
+    --dark-pink: #2b7181;
+}
+
+body {
+    font-family: monospace;
+    font-size: 20px;
+    background-color: var(--dark);
+    color: var(--light);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    overflow-x: hidden !important;
+}
+
+button {
+    border: 2px solid var(--blue);
+    background-color: transparent;
+    color: var(--light);
+    font-size: 20px;
+    padding: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin: 20px auto;
+}
+
+button:hover {
+    border: 2px solid var(--blue);
+    background-color: var(--blue);
+    color: var(--dark);
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+    color: var(--blue);
+}
+
+h2 {
+    font-size: 35px;
+    text-align: center;
+    color: var(--blue);
+    margin: 30px 0;
+}
+
+h3 {
+    font-size: 28px;
+    color: var(--blue);
+    margin: 10px 0;
+}
+
+.kartya-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 20px;
+}
+
+.mosdo-kartya {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid var(--blue);
+    padding: 30px;
+    min-width: 300px;
+    border-radius: 10px;
+    background-color: rgba(36, 192, 227, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mosdo-kartya:hover {
+    box-shadow: 0px 0px 40px 3px var(--blue);
+    transform: scale(1.05);
+}
+
+.info-text {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+#aEpulet, #bEpulet {
+    margin: 40px 0;
+}
