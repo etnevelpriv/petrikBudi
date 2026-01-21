@@ -1,15 +1,16 @@
 import { Mosdo } from "./mosdo.js";
+const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
 
 const init = async function () {
     document.getElementById('alert').classList.add('hide');
-    const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
-    showMosdok(await fetchGET(URL), URL);
-    document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs(URL));
+    await showMosdok();
+    document.getElementById('uploadFormButton').addEventListener('click', () => getFormInputs());
 };
 
-const fetchGET = async function (url) {
+const fetchGET = async function () {
+
     try {
-        const response = await fetch(url, {
+        const response = await fetch(URL, {
             method: 'GET',
         });
         if (!response.ok) {
@@ -21,7 +22,7 @@ const fetchGET = async function (url) {
     };
 };
 
-const getFormInputs = async function (url) {
+const getFormInputs = async function () {
     const tipus = document.getElementById('tipusInput').value;
     const epulet = document.querySelector('input[name="epulet"]:checked').value;
     const emelet = document.getElementById('emeletInput').value;
@@ -33,14 +34,34 @@ const getFormInputs = async function (url) {
 
     const mosdo = new Mosdo(tipus, epulet, Number(emelet), mukodik, foglalt, papir, csap, Number(tisztasag));
     console.log(mosdo.toString())
-    await mosdo.postMosdoToDB(url);
+    await mosdo.postMosdoToDB(URL);
+    showMosdok();
 };
 
-const deleteMosdoByID = async function (id, url) {
+const modifyMosdoByID = async function (id, obj) {
+    try {
+        const response = await fetch(`${URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        if (!response.ok) {
+            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+        };
+        console.log(await response.text());
+    } catch (err) {
+        throw new Error(err);
+    };
+    showMosdok();
+}; 
+
+const deleteMosdoByID = async function (id) {
     console.log('Elindult a torles folyamata')
     if (await alertModalMegjelenites('Ezzel vegleg torlodni fog a mosdo.')) {
         try {
-            const response = await fetch(`${url}/${id}`, {
+            const response = await fetch(`${URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,12 +83,16 @@ const deleteMosdoByID = async function (id, url) {
         } catch (err) {
             throw new Error(err);
         };
+        showMosdok();
     };
 };
 
-const showMosdok = function (arr, url) {
+const showMosdok = async function () {
+    const arr = await fetchGET();
     const container = document.getElementById('modositasContainer');
-    // console.log(arr)
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
     arr.forEach(element => {
         const card = document.createElement('div');
         card.classList.add('torles-kartya');
@@ -80,11 +105,11 @@ const showMosdok = function (arr, url) {
         const button = document.createElement('button');
         button.textContent = 'Modositas';
         card.appendChild(button);
-        button.addEventListener('click', () => modalMegjelenitese(element, url))
+        button.addEventListener('click', () => modalMegjelenitese(element, URL));
     });
 };
 
-const modalMegjelenitese = function (mosdo, url) {
+const modalMegjelenitese = function (mosdo) {
     const modal = document.getElementById('modal');
     document.body.style.overflow = 'hidden';
 
@@ -137,13 +162,13 @@ const modalMegjelenitese = function (mosdo, url) {
     const gombTorles = document.createElement('button');
     gombTorles.classList.add('modal-modositas-gomb');
     gombTorles.textContent = 'Torles';
-    gombTorles.addEventListener('click', () => deleteMosdoByID(mosdo.id, url));
+    gombTorles.addEventListener('click', () => deleteMosdoByID(mosdo.id, URL));
     container.appendChild(gombTorles);
 
     const gombMentes = document.createElement('button');
     gombMentes.classList.add('modal-modositas-gomb');
     gombMentes.textContent = 'Mentes';
-    gombMentes.addEventListener('click', () => putMosdoByID(mosdo.id, url));
+    gombMentes.addEventListener('click', () => putMosdoByID(mosdo.id, URL));
     container.appendChild(gombMentes);
 };
 
