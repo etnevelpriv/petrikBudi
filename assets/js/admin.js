@@ -22,7 +22,6 @@ const fetchGET = async function (url) {
 };
 
 const getFormInputs = async function (url) {
-    const id = document.getElementById('idInput').value;
     const tipus = document.getElementById('tipusInput').value;
     const epulet = document.querySelector('input[name="epulet"]:checked').value;
     const emelet = document.getElementById('emeletInput').value;
@@ -32,7 +31,7 @@ const getFormInputs = async function (url) {
     const csap = document.getElementById('csapInput').checked;
     const tisztasag = document.getElementById('tisztasagInput').value;
 
-    const mosdo = new Mosdo(Number(id), tipus, epulet, Number(emelet), mukodik, foglalt, papir, csap, Number(tisztasag));
+    const mosdo = new Mosdo(tipus, epulet, Number(emelet), mukodik, foglalt, papir, csap, Number(tisztasag));
     console.log(mosdo.toString())
     await mosdo.postMosdoToDB(url);
 };
@@ -73,10 +72,6 @@ const showMosdok = function (arr, url) {
         const card = document.createElement('div');
         card.classList.add('torles-kartya');
         container.appendChild(card);
-
-        const id = document.createElement('h3');
-        id.textContent = element.id;
-        card.appendChild(id);
 
         const name = document.createElement('strong');
         name.textContent = `${element.epulet} épület ${element.emelet}. emelet`;

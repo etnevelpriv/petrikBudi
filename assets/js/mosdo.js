@@ -1,8 +1,5 @@
 export class Mosdo {
-    constructor(id, tipus, epulet, emelet, mukodik, foglalt, papir, csap, tisztasag) {
-        if (typeof id != 'number' || id === 0 || id === null) {
-            throw new Error(`ID mezo helytelen: ${id}, szamot kell megadni.`)
-        };
+    constructor( tipus, epulet, emelet, mukodik, foglalt, papir, csap, tisztasag) {
         if (typeof tipus != 'string' || (tipus != 'Ferfi' && tipus != 'Noi' && tipus != 'Mozgasserult')) {
             throw new Error(`Tipus mezo helytelen: ${tipus}, csak a megadott tipusok kozul lehet valasztani.`)
         };
@@ -27,7 +24,6 @@ export class Mosdo {
         if (typeof tisztasag != 'number' || tisztasag < 1 || tisztasag === null || tisztasag > 5) {
             throw new Error(`Tisztasag mezo helytelen: ${tisztasag}, szamot kell megadni 1 es 5 kozott.`)
         };
-        this.id = id;
         this.tipus = tipus;
         this.epulet = epulet;
         this.emelet = emelet;
@@ -38,11 +34,10 @@ export class Mosdo {
         this.tisztasag = tisztasag;
     };
     toString() {
-        return (`ID: ${this.id}. Tipus: ${this.tipus}. Helyszin: ${this.epulet} épület ${this.emelet}. emelet. Mukodik: ${this.mukodik}. Foglalt: ${this.foglalt}. Papir: ${this.papir}. Csap: ${this.csap}. Tisztasag: ${this.tisztasag}`);
+        return (`Tipus: ${this.tipus}. Helyszin: ${this.epulet} épület ${this.emelet}. emelet. Mukodik: ${this.mukodik}. Foglalt: ${this.foglalt}. Papir: ${this.papir}. Csap: ${this.csap}. Tisztasag: ${this.tisztasag}`);
     };
     async postMosdoToDB(url) {
         const obj = {
-            id: this.id,
             tipus: this.tipus,
             epulet: this.epulet,
             emelet: this.emelet,
