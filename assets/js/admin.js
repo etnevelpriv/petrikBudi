@@ -104,6 +104,7 @@ const deleteMosdoByID = async function (id) {
     };
 };
 
+
 const showMosdok = async function () {
     const arr = await fetchGET();
     const container = document.getElementById('modositasContainer');
