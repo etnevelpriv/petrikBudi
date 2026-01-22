@@ -5,6 +5,54 @@
     --dark-pink: #2b7181;
 }
 
+.show {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}
+
+.modal {
+    z-index: 1001;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark);
+}
+
+.modal-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.xButton {
+    display: flex;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px;
+    color: var(--blue);
+    font-size: 50px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.xButton:hover {
+    transform: scale(1.2);
+    background-color: transparent;
+    color: var(--blue);
+    border: none;
+}
+
 body {
     font-family: monospace;
     font-size: 20px;

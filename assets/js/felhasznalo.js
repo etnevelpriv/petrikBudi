@@ -84,6 +84,11 @@ const showMosdok = async function () {
         tisztasag.classList.add('info-text');
         tisztasag.textContent = `Tisztasag: ${element.tisztasag}/5`;
         card.appendChild(tisztasag);
+
+        const modositas = document.createElement('button');
+        modositas.textContent = 'Modositas';
+        modositas.addEventListener('click', () => modalMegjelenitese(element, URL));
+        card.appendChild(modositas);
         
         if (element.epulet === 'A') {
             aContainer.appendChild(card);
@@ -91,6 +96,69 @@ const showMosdok = async function () {
             bContainer.appendChild(card);
         }
     });
+};
+
+const modalMegjelenitese = function (mosdo, url) {
+    const modal = document.getElementById('modal');
+    document.body.style.overflow = 'hidden';
+
+    while (modal.firstChild) {
+        modal.removeChild(modal.firstChild);
+    }
+
+    const xButton = document.createElement('button');
+    xButton.classList.add('xButton');
+    xButton.textContent = 'X';
+    xButton.addEventListener('click', () => {
+        document.body.style.overflow = 'scroll';
+        document.getElementById('modal').classList.add('hide');
+        document.getElementById('modal').classList.remove('show');
+    });
+    modal.appendChild(xButton)
+
+    modal.classList.remove('hide');
+    modal.classList.add('show');
+    for (const [key, value] of Object.entries(mosdo)) {
+
+        const container = document.createElement('div');
+        container.classList.add('modal-row');
+        modal.appendChild(container);
+
+        console.log(`${key}: ${value}`);
+
+        const kulcs = document.createElement('p');
+        kulcs.classList.add('modal-kulcs');
+        kulcs.textContent = key;
+
+        const ertek = document.createElement('p');
+        ertek.classList.add('modal-ertek');
+        ertek.textContent = value;
+
+        const gomb = document.createElement('i');
+        gomb.classList.add('modal-modositas-gomb', 'fa-solid', 'fa-pen-to-square');
+        gomb.addEventListener('click', () => pToInput(key, value, ertek));
+
+        container.appendChild(kulcs);
+        container.appendChild(ertek);
+        container.appendChild(gomb);
+
+    };
+
+    const container = document.createElement('div');
+    container.classList.add('modal-buttons');
+    modal.appendChild(container);
+
+    const gombTorles = document.createElement('button');
+    gombTorles.classList.add('modal-modositas-gomb');
+    gombTorles.textContent = 'Torles';
+    gombTorles.addEventListener('click', () => deleteMosdoByID(mosdo.id, url));
+    container.appendChild(gombTorles);
+
+    const gombMentes = document.createElement('button');
+    gombMentes.classList.add('modal-modositas-gomb');
+    gombMentes.textContent = 'Mentes';
+    gombMentes.addEventListener('click', () => putMosdoByID(mosdo.id, url));
+    container.appendChild(gombMentes);
 };
 
 document.addEventListener('DOMContentLoaded', init);
