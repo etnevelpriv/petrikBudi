@@ -1,5 +1,7 @@
 const URL = 'https://retoolapi.dev/cFJq9K/petrikBudi'
 
+let currentEditingMosdo = null;
+
 const init = async () => {
     document.getElementById('reloadBudik').addEventListener('click', () => showMosdok());
     await showMosdok();
@@ -98,28 +100,12 @@ const showMosdok = async function () {
     });
 };
 
-const modifyMosdoByID = async function (id, obj) {
-    try {
-        const response = await fetch(`${URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-        });
-        if (!response.ok) {
-            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
-        };
-        console.log(await response.text());
-    } catch (err) {
-        throw new Error(err);
-    };
-    showMosdok();
-}; 
+
 
 const modalMegjelenitese = function (mosdo, url) {
     const modal = document.getElementById('modal');
     document.body.style.overflow = 'hidden';
+    currentEditingMosdo = { ...mosdo };
 
     while (modal.firstChild) {
         modal.removeChild(modal.firstChild);
@@ -132,12 +118,17 @@ const modalMegjelenitese = function (mosdo, url) {
         document.body.style.overflow = 'scroll';
         document.getElementById('modal').classList.add('hide');
         document.getElementById('modal').classList.remove('show');
+        currentEditingMosdo = null;
     });
     modal.appendChild(xButton)
 
     modal.classList.remove('hide');
     modal.classList.add('show');
+    
+    const allowedFields = ['mukodik', 'foglalt', 'papir', 'csap', 'tisztasag'];
+    
     for (const [key, value] of Object.entries(mosdo)) {
+        if (!allowedFields.includes(key)) continue;
 
         const container = document.createElement('div');
         container.classList.add('modal-row');
@@ -178,6 +169,114 @@ const modalMegjelenitese = function (mosdo, url) {
     gombMentes.textContent = 'Mentes';
     gombMentes.addEventListener('click', () => putMosdoByID(mosdo.id, url));
     container.appendChild(gombMentes);
+};
+
+const pToInput = function (key, value, erekElement) {
+    const input = document.createElement('input');
+    input.type = (key === 'tisztasag') ? 'number' : 'checkbox';
+    
+    if (key === 'tisztasag') {
+        input.value = value;
+        input.min = '1';
+        input.max = '5';
+    } else {
+        input.checked = value;
+    }
+    
+    erekElement.replaceWith(input);
+    input.focus();
+    
+    const saveChange = () => {
+        if (key === 'tisztasag') {
+            const numValue = parseInt(input.value);
+            if (numValue < 1 || numValue > 5) {
+                alert('Tisztasag ertekenek 1 es 5 kozott kell lennie!');
+                return;
+            }
+            currentEditingMosdo[key] = numValue;
+            erekElement.textContent = numValue;
+        } else {
+            currentEditingMosdo[key] = input.checked;
+            erekElement.textContent = input.checked ? 'Igen' : 'Nem';
+        }
+        input.replaceWith(erekElement);
+    };
+    
+    input.addEventListener('blur', saveChange);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') saveChange();
+    });
+};
+
+const putMosdoByID = async function (id, url) {
+    try {
+        if (!currentEditingMosdo) {
+            throw new Error('Nincs szerkesztett adat');
+        }
+
+        const obj = {
+            tipus: currentEditingMosdo.tipus,
+            epulet: currentEditingMosdo.epulet,
+            emelet: currentEditingMosdo.emelet,
+            mukodik: currentEditingMosdo.mukodik,
+            foglalt: currentEditingMosdo.foglalt,
+            papir: currentEditingMosdo.papir,
+            csap: currentEditingMosdo.csap,
+            tisztasag: currentEditingMosdo.tisztasag
+        };
+
+        const response = await fetch(`${url}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+        }
+
+        console.log('Mosdo sikeresen modositva');
+        document.body.style.overflow = 'scroll';
+        document.getElementById('modal').classList.add('hide');
+        document.getElementById('modal').classList.remove('show');
+        currentEditingMosdo = null;
+        await showMosdok();
+    } catch (err) {
+        alert(`Hiba a menteskor: ${err.message}`);
+        console.error(err);
+    }
+};
+
+const deleteMosdoByID = async function (id, url) {
+    try {
+        const confirmed = confirm('Biztosan torold ki ezt a mosdot?');
+        if (!confirmed) {
+            return;
+        }
+
+        const response = await fetch(`${url}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+        }
+
+        console.log('Mosdo sikeresen torolve');
+        document.body.style.overflow = 'scroll';
+        document.getElementById('modal').classList.add('hide');
+        document.getElementById('modal').classList.remove('show');
+        currentEditingMosdo = null;
+        await showMosdok();
+    } catch (err) {
+        alert(`Hiba a torldes kozeban: ${err.message}`);
+        console.error(err);
+    }
 };
 
 document.addEventListener('DOMContentLoaded', init);
