@@ -98,6 +98,25 @@ const showMosdok = async function () {
     });
 };
 
+const modifyMosdoByID = async function (id, obj) {
+    try {
+        const response = await fetch(`${URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        if (!response.ok) {
+            throw new Error(`Hibakod: ${response.status}. Hibauzenet: ${response.statusText}. Hibas URL: ${response.url}. Teljes hibauzenet: ${await response.text()}`);
+        };
+        console.log(await response.text());
+    } catch (err) {
+        throw new Error(err);
+    };
+    showMosdok();
+}; 
+
 const modalMegjelenitese = function (mosdo, url) {
     const modal = document.getElementById('modal');
     document.body.style.overflow = 'hidden';
